@@ -1,5 +1,8 @@
 package com.alpha.www.SpringBootBlogApp.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +56,16 @@ public class CommentServiceImpl implements CommentService {
 		comment.setEmail(commentDto.getEmail());
 		comment.setBody(commentDto.getBody());
 		return comment;
+	}
+
+	@Override
+	public List<CommentDto> getCommentsByPostId(long postId) {
+		
+		// retrieve comments by postId
+		List<Comment> comments = commentRepository.findByPostId(postId);
+		
+		// converting list of comment entities to list of comment dto's
+		return comments.stream().map(comment -> entityToDto(comment)).collect(Collectors.toList());
 	}
 
 }
