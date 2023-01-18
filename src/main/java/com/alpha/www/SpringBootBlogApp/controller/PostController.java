@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,5 +47,12 @@ public class PostController {
 	public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable long id){
 		PostDto postDtoResponse = postService.updatePost(postDto, id);
 		return new ResponseEntity<>(postDtoResponse, HttpStatus.OK);
+	}
+	
+	// delete post rest api
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deletePost(@PathVariable long id){
+		postService.deletePostById(id);
+		return ResponseEntity.ok("post deleted successfully");
 	}
 }
