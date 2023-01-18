@@ -3,6 +3,7 @@ package com.alpha.www.SpringBootBlogApp.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class CommentServiceImpl implements CommentService {
 	
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public CommentDto createComment(long postId, CommentDto commentDto) {
@@ -42,22 +46,24 @@ public class CommentServiceImpl implements CommentService {
 	
 	// converting entity to DTO
 	private CommentDto entityToDto(Comment comment) {
-		CommentDto commentDto = new CommentDto();
-		commentDto.setId(comment.getId());
-		commentDto.setName(comment.getName());
-		commentDto.setEmail(comment.getEmail());
-		commentDto.setBody(comment.getBody());
-		return commentDto;
+//		CommentDto commentDto = new CommentDto();
+//		commentDto.setId(comment.getId());
+//		commentDto.setName(comment.getName());
+//		commentDto.setEmail(comment.getEmail());
+//		commentDto.setBody(comment.getBody());
+//		return commentDto;
+		return modelMapper.map(comment, CommentDto.class);
 	}
 	
 	// converting DTO to entity
 	private Comment dtoToEntity(CommentDto commentDto) {
-		Comment comment = new Comment();
-		comment.setId(commentDto.getId());
-		comment.setName(commentDto.getName());
-		comment.setEmail(commentDto.getEmail());
-		comment.setBody(commentDto.getBody());
-		return comment;
+//		Comment comment = new Comment();
+//		comment.setId(commentDto.getId());
+//		comment.setName(commentDto.getName());
+//		comment.setEmail(commentDto.getEmail());
+//		comment.setBody(commentDto.getBody());
+//		return comment;
+		return modelMapper.map(commentDto, Comment.class);
 	}
 
 	@Override
