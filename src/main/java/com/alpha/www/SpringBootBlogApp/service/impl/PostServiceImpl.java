@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.alpha.www.SpringBootBlogApp.dto.PostDto;
 import com.alpha.www.SpringBootBlogApp.entity.Post;
+import com.alpha.www.SpringBootBlogApp.exception.ResourceNotFoundException;
 import com.alpha.www.SpringBootBlogApp.repository.PostRepository;
 import com.alpha.www.SpringBootBlogApp.service.PostService;
 
@@ -61,6 +62,12 @@ public class PostServiceImpl implements PostService {
 		post.setDescription(postDto.getDescription());
 		post.setContent(postDto.getContent());
 		return post;
+	}
+
+	@Override
+	public PostDto getPostById(long id) {
+		Post post = postRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Post", "id", id));
+		return entityToDto(post);
 	}
 
 }
