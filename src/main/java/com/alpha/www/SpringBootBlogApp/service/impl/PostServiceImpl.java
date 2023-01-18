@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.alpha.www.SpringBootBlogApp.dto.PostDto;
+import com.alpha.www.SpringBootBlogApp.dto.PostResponse;
 import com.alpha.www.SpringBootBlogApp.entity.Post;
 import com.alpha.www.SpringBootBlogApp.exception.ResourceNotFoundException;
 import com.alpha.www.SpringBootBlogApp.repository.PostRepository;
@@ -43,7 +44,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+	public PostResponse getAllPosts(int pageNo, int pageSize) {
 		
 		// create Pageable instance/object
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
@@ -53,7 +54,17 @@ public class PostServiceImpl implements PostService {
 		// get content from Page object
 		List<Post> posts = pageObj.getContent();
 		
-		return posts.stream().map(post -> entityToDto(post)).collect(Collectors.toList());
+		List<PostDto> content = posts.stream().map(post -> entityToDto(post)).collect(Collectors.toList());
+		
+		PostResponse postResponse = new PostResponse();
+		postResponse.setContent(content);
+		postResponse.setPageNo(pageObj.getNumber());
+		postResponse.setPageSize(pageObj.getSize());
+		postResponse.setTotalElements(pageObj.getTotalElements());
+		postResponse.setTotalPages(pageObj.getTotalPages());
+		postResponse.setLast(pageObj.isLast());
+		
+		return postResponse;
 	}
 	
 	// converting entity to DTO

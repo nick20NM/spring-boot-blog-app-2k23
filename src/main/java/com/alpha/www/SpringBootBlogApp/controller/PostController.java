@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.www.SpringBootBlogApp.dto.PostDto;
+import com.alpha.www.SpringBootBlogApp.dto.PostResponse;
 import com.alpha.www.SpringBootBlogApp.service.PostService;
 
 @RestController
@@ -34,7 +35,7 @@ public class PostController {
 	// get all posts rest api
 //	@GetMapping("/")
 	@GetMapping
-	public List<PostDto> getAllPosts(
+	public PostResponse getAllPosts(
 			@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo, 
 			@RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
 			){

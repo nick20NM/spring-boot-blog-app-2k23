@@ -3,12 +3,13 @@ package com.alpha.www.SpringBootBlogApp.service;
 import java.util.List;
 
 import com.alpha.www.SpringBootBlogApp.dto.PostDto;
+import com.alpha.www.SpringBootBlogApp.dto.PostResponse;
 
 public interface PostService {
 	
 	PostDto createPost(PostDto postDto);
 	
-	List<PostDto> getAllPosts(int pageNo, int pageSize);
+	PostResponse getAllPosts(int pageNo, int pageSize);
 	
 	PostDto getPostById(long id);
 	
