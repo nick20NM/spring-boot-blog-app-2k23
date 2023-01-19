@@ -1,4 +1,6 @@
-package com.alpha.www.SpringBootBlogApp.dto;
+package com.alpha.www.SpringBootBlogApp.payload;
+
+import java.util.Set;
 
 import lombok.Data;
 
@@ -8,4 +10,5 @@ public class PostDto {
 	private String title;
 	private String description;
 	private String content;
+	private Set<CommentDto> comments;
 }

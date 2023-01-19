@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.alpha.www.SpringBootBlogApp.dto.CommentDto;
 import com.alpha.www.SpringBootBlogApp.entity.Comment;
 import com.alpha.www.SpringBootBlogApp.entity.Post;
 import com.alpha.www.SpringBootBlogApp.exception.BlogAPIException;
 import com.alpha.www.SpringBootBlogApp.exception.ResourceNotFoundException;
+import com.alpha.www.SpringBootBlogApp.payload.CommentDto;
 import com.alpha.www.SpringBootBlogApp.repository.CommentRepository;
 import com.alpha.www.SpringBootBlogApp.repository.PostRepository;
 import com.alpha.www.SpringBootBlogApp.service.CommentService;
@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public CommentDto createComment(long postId, CommentDto commentDto) {
-		Comment comment = dtoToEntity(commentDto);
+		Comment comment = modelMapper.map(commentDto, Comment.class);
 		
 		// retrieve post entity by id
 		Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
@@ -41,29 +41,7 @@ public class CommentServiceImpl implements CommentService {
 		
 		// save comment entity to DB
 		Comment savedComment = commentRepository.save(comment);
-		return entityToDto(savedComment);
-	}
-	
-	// converting entity to DTO
-	private CommentDto entityToDto(Comment comment) {
-//		CommentDto commentDto = new CommentDto();
-//		commentDto.setId(comment.getId());
-//		commentDto.setName(comment.getName());
-//		commentDto.setEmail(comment.getEmail());
-//		commentDto.setBody(comment.getBody());
-//		return commentDto;
-		return modelMapper.map(comment, CommentDto.class);
-	}
-	
-	// converting DTO to entity
-	private Comment dtoToEntity(CommentDto commentDto) {
-//		Comment comment = new Comment();
-//		comment.setId(commentDto.getId());
-//		comment.setName(commentDto.getName());
-//		comment.setEmail(commentDto.getEmail());
-//		comment.setBody(commentDto.getBody());
-//		return comment;
-		return modelMapper.map(commentDto, Comment.class);
+		return modelMapper.map(savedComment, CommentDto.class);
 	}
 
 	@Override
@@ -73,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
 		List<Comment> comments = commentRepository.findByPostId(postId);
 		
 		// converting list of comment entities to list of comment dto's
-		return comments.stream().map(comment -> entityToDto(comment)).collect(Collectors.toList());
+		return comments.stream().map(comment -> modelMapper.map(comment, CommentDto.class)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -88,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
 			throw new BlogAPIException(HttpStatus.BAD_REQUEST, "comment does not belong to post");
 		}
 		
-		return entityToDto(comment);
+		return modelMapper.map(comment, CommentDto.class);
 	}
 
 	@Override
@@ -100,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
 		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentId));
 		
 		if (!comment.getPost().getId().equals(post.getId())) {
-			throw new BlogAPIException(HttpStatus.BAD_REQUEST, "comment does not belongs to post");
+			throw new BlogAPIException(HttpStatus.BAD_REQUEST, "comment does not belong to post");
 		}
 		
 		comment.setName(commentDtoRequest.getName());
@@ -108,7 +86,7 @@ public class CommentServiceImpl implements CommentService {
 		comment.setBody(commentDtoRequest.getBody());
 		
 		Comment updatedComment = commentRepository.save(comment);
-		return entityToDto(updatedComment);
+		return modelMapper.map(updatedComment, CommentDto.class);
 	}
 
 	@Override
@@ -120,7 +98,7 @@ public class CommentServiceImpl implements CommentService {
 		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentId));
 		
 		if (!comment.getPost().getId().equals(post.getId())) {
-			throw new BlogAPIException(HttpStatus.BAD_REQUEST, "comment does not belongs to post");
+			throw new BlogAPIException(HttpStatus.BAD_REQUEST, "comment does not belong to post");
 		}
 		
 		commentRepository.delete(comment);

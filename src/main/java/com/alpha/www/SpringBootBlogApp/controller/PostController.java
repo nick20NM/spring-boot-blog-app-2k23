@@ -1,6 +1,9 @@
 package com.alpha.www.SpringBootBlogApp.controller;
 
-import java.util.List;
+import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_PAGE_NO;
+import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_PAGE_SIZE;
+import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_SORT_BY;
+import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_SORT_DIRECTION;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alpha.www.SpringBootBlogApp.dto.PostDto;
-import com.alpha.www.SpringBootBlogApp.dto.PostResponse;
+import com.alpha.www.SpringBootBlogApp.payload.PostDto;
+import com.alpha.www.SpringBootBlogApp.payload.PostResponse;
 import com.alpha.www.SpringBootBlogApp.service.PostService;
-import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.*;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -28,13 +30,12 @@ public class PostController {
 	private PostService postService;
 	
 	// create post rest api
-	@PostMapping("/")
+	@PostMapping
 	public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto){
 		return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
 	}
 	
 	// get all posts rest api
-//	@GetMapping("/")
 	@GetMapping
 	public PostResponse getAllPosts(
 			@RequestParam(value = "pageNo", defaultValue = DEFAULT_PAGE_NO, required = false) int pageNo, 
@@ -47,7 +48,7 @@ public class PostController {
 	
 	// get post by id rest api
 	@GetMapping("/{id}")
-	public ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") long id){
+	public ResponseEntity<PostDto> getPostById(@PathVariable long id){
 		return ResponseEntity.ok(postService.getPostById(id));
 	}
 	

@@ -1,4 +1,4 @@
-package com.alpha.www.SpringBootBlogApp.dto;
+package com.alpha.www.SpringBootBlogApp.payload;
 
 import java.util.List;
 

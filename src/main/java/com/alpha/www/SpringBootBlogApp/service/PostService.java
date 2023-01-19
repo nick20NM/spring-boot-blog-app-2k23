@@ -1,9 +1,7 @@
 package com.alpha.www.SpringBootBlogApp.service;
 
-import java.util.List;
-
-import com.alpha.www.SpringBootBlogApp.dto.PostDto;
-import com.alpha.www.SpringBootBlogApp.dto.PostResponse;
+import com.alpha.www.SpringBootBlogApp.payload.PostDto;
+import com.alpha.www.SpringBootBlogApp.payload.PostResponse;
 
 public interface PostService {
 	
