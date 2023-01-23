@@ -19,6 +19,7 @@ import com.alpha.www.SpringBootBlogApp.payload.LoginDto;
 import com.alpha.www.SpringBootBlogApp.payload.RegisterDto;
 import com.alpha.www.SpringBootBlogApp.repository.RoleRepository;
 import com.alpha.www.SpringBootBlogApp.repository.UserRepository;
+import com.alpha.www.SpringBootBlogApp.security.JwtTokenProvider;
 import com.alpha.www.SpringBootBlogApp.service.AuthService;
 
 @Service
@@ -36,6 +37,9 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	
 	@Override
 	public String login(LoginDto loginDto) {
 		
@@ -45,7 +49,9 @@ public class AuthServiceImpl implements AuthService {
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
-		return "user logged-in successfully";
+		String token = jwtTokenProvider.generateToken(authentication);
+		
+		return token;
 	}
 
 	@Override
