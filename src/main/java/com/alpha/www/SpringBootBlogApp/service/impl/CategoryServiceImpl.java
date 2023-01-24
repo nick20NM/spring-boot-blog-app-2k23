@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alpha.www.SpringBootBlogApp.entity.Category;
+import com.alpha.www.SpringBootBlogApp.exception.ResourceNotFoundException;
 import com.alpha.www.SpringBootBlogApp.payload.CategoryDto;
 import com.alpha.www.SpringBootBlogApp.repository.CategoryRepository;
 import com.alpha.www.SpringBootBlogApp.service.CategoryService;
@@ -23,6 +24,14 @@ public class CategoryServiceImpl implements CategoryService {
 		Category category = modelMapper.map(categoryDto, Category.class);
 		Category savedCategory = categoryRepository.save(category);
 		return modelMapper.map(savedCategory, CategoryDto.class);
+	}
+
+	@Override
+	public CategoryDto getCategory(Long categoryId) {
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("category", "id", categoryId));
+		
+		return modelMapper.map(category, CategoryDto.class);
 	}
 
 }
