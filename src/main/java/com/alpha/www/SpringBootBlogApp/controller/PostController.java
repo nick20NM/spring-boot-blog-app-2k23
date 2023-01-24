@@ -5,6 +5,8 @@ import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_PAGE_SI
 import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_SORT_BY;
 import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_SORT_DIRECTION;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +72,13 @@ public class PostController {
 	public ResponseEntity<String> deletePost(@PathVariable long id){
 		postService.deletePostById(id);
 		return ResponseEntity.ok("post deleted successfully");
+	}
+	
+	// get posts by category id REST API
+	// http://localhost:8080/api/posts/category/3
+	@GetMapping("/category/{id}")
+	public ResponseEntity<List<PostDto>> getPostsByCategoryId(@PathVariable long id){
+		List<PostDto> postDto = postService.getPostsByCategory(id);
+		return ResponseEntity.ok(postDto);
 	}
 }
