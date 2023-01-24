@@ -49,15 +49,17 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		
 		httpSecurity.csrf().disable()
-		.authorizeHttpRequests(authorize -> 
-//		authorize.anyRequest().authenticated()
-		authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-		.requestMatchers("/api/auth/**").permitAll()
-		.anyRequest().authenticated())
-		.exceptionHandling(exception -> 
-		exception.authenticationEntryPoint(authenticationEntryPoint))
-		.sessionManagement(session -> 
-		session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+					.authorizeHttpRequests(authorize -> 
+			//		authorize.anyRequest().authenticated()
+					authorize
+					.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+//					.requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+					.requestMatchers("/api/auth/**").permitAll()
+					.anyRequest().authenticated())
+					.exceptionHandling(exception -> 
+					exception.authenticationEntryPoint(authenticationEntryPoint))
+					.sessionManagement(session -> 
+					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		
 		httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		

@@ -1,5 +1,7 @@
 package com.alpha.www.SpringBootBlogApp.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +36,11 @@ public class CategoryController {
 	public ResponseEntity<CategoryDto> getCategory(@PathVariable long id){
 		CategoryDto categoryDto = categoryService.getCategory(id);
 		return ResponseEntity.ok(categoryDto);
+	}
+	
+	// get all categories REST API
+	@GetMapping
+	public ResponseEntity<List<CategoryDto>> getAllCategories(){
+		return ResponseEntity.ok(categoryService.getAllCategories());
 	}
 }
