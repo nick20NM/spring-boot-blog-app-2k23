@@ -11,10 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.alpha.www.SpringBootBlogApp.entity.Category;
 import com.alpha.www.SpringBootBlogApp.entity.Post;
 import com.alpha.www.SpringBootBlogApp.exception.ResourceNotFoundException;
 import com.alpha.www.SpringBootBlogApp.payload.PostDto;
 import com.alpha.www.SpringBootBlogApp.payload.PostResponse;
+import com.alpha.www.SpringBootBlogApp.repository.CategoryRepository;
 import com.alpha.www.SpringBootBlogApp.repository.PostRepository;
 import com.alpha.www.SpringBootBlogApp.service.PostService;
 
@@ -26,11 +28,20 @@ public class PostServiceImpl implements PostService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@Override
 	public PostDto createPost(PostDto postDto) {
+		
+		Category category = categoryRepository.findById(postDto.getCategoryId())
+				.orElseThrow(() -> new ResourceNotFoundException("category", "id", postDto.getCategoryId()));
+		
 		Post post = modelMapper.map(postDto, Post.class);
+		post.setCategory(category);
 		Post savedPost = postRepository.save(post);
+		
 		return modelMapper.map(savedPost, PostDto.class);
 	}
 
