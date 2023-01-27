@@ -5,6 +5,7 @@ import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_PAGE_SI
 import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_SORT_BY;
 import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_SORT_DIRECTION;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.www.SpringBootBlogApp.payload.PostDto;
+import com.alpha.www.SpringBootBlogApp.payload.PostDtoV2;
 import com.alpha.www.SpringBootBlogApp.payload.PostResponse;
 import com.alpha.www.SpringBootBlogApp.service.PostService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/posts")
+//@RequestMapping("/api/v1/posts")
 public class PostController {
 
 	@Autowired
@@ -36,13 +38,13 @@ public class PostController {
 	
 	// create post rest api
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping
+	@PostMapping("/api/v1/posts")
 	public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto){
 		return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
 	}
 	
 	// get all posts rest api
-	@GetMapping
+	@GetMapping("/api/v1/posts")
 	public PostResponse getAllPosts(
 			@RequestParam(value = "pageNo", defaultValue = DEFAULT_PAGE_NO, required = false) int pageNo, 
 			@RequestParam(value = "pageSize", defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize, 
@@ -53,14 +55,35 @@ public class PostController {
 	}
 	
 	// get post by id rest api
-	@GetMapping("/{id}")
-	public ResponseEntity<PostDto> getPostById(@PathVariable long id){
+	@GetMapping("/api/v1/posts/{id}")
+	public ResponseEntity<PostDto> getPostByIdV1(@PathVariable long id){
 		return ResponseEntity.ok(postService.getPostById(id));
 	}
 	
+	// get post by id rest api v2
+		@GetMapping("/api/v2/posts/{id}")
+		public ResponseEntity<PostDtoV2> getPostByIdV2(@PathVariable long id){
+			PostDto postDto = postService.getPostById(id);
+			
+			PostDtoV2 postDtoV2 = new PostDtoV2();
+			postDtoV2.setId(postDto.getId());
+			postDtoV2.setTitle(postDto.getTitle());
+			postDtoV2.setDescription(postDto.getDescription());
+			postDtoV2.setContent(postDto.getContent());
+			
+			List<String> tags = new ArrayList<>();
+			tags.add("java");
+			tags.add("spring boot");
+			tags.add("aws");
+			
+			postDtoV2.setTags(tags);
+			
+			return ResponseEntity.ok(postDtoV2);
+		}
+	
 	// update post by id rest api
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping("/{id}")
+	@PutMapping("/api/v1/posts/{id}")
 	public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable long id){
 		PostDto postDtoResponse = postService.updatePost(postDto, id);
 		return new ResponseEntity<>(postDtoResponse, HttpStatus.OK);
@@ -68,7 +91,7 @@ public class PostController {
 	
 	// delete post rest api
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/api/v1/posts/{id}")
 	public ResponseEntity<String> deletePost(@PathVariable long id){
 		postService.deletePostById(id);
 		return ResponseEntity.ok("post deleted successfully");
@@ -76,7 +99,7 @@ public class PostController {
 	
 	// get posts by category id REST API
 	// http://localhost:8080/api/posts/category/3
-	@GetMapping("/category/{id}")
+	@GetMapping("/api/v1/posts/category/{id}")
 	public ResponseEntity<List<PostDto>> getPostsByCategoryId(@PathVariable long id){
 		List<PostDto> postDto = postService.getPostsByCategory(id);
 		return ResponseEntity.ok(postDto);
