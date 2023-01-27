@@ -23,7 +23,7 @@ public class PostDtoV2 {
 	private String content;
 	private Set<CommentDto> comments;
 	
-	private long categoryId;
+//	private long categoryId;
 	
 	private List<String> tags;
 }

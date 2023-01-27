@@ -30,7 +30,6 @@ import com.alpha.www.SpringBootBlogApp.service.PostService;
 import jakarta.validation.Valid;
 
 @RestController
-//@RequestMapping("/api/v1/posts")
 public class PostController {
 
 	@Autowired
@@ -55,31 +54,31 @@ public class PostController {
 	}
 	
 	// get post by id rest api
-	@GetMapping("/api/v1/posts/{id}")
+	@GetMapping(value = "/api/posts/{id}", params = "version=1")
 	public ResponseEntity<PostDto> getPostByIdV1(@PathVariable long id){
 		return ResponseEntity.ok(postService.getPostById(id));
 	}
 	
 	// get post by id rest api v2
-		@GetMapping("/api/v2/posts/{id}")
-		public ResponseEntity<PostDtoV2> getPostByIdV2(@PathVariable long id){
-			PostDto postDto = postService.getPostById(id);
-			
-			PostDtoV2 postDtoV2 = new PostDtoV2();
-			postDtoV2.setId(postDto.getId());
-			postDtoV2.setTitle(postDto.getTitle());
-			postDtoV2.setDescription(postDto.getDescription());
-			postDtoV2.setContent(postDto.getContent());
-			
-			List<String> tags = new ArrayList<>();
-			tags.add("java");
-			tags.add("spring boot");
-			tags.add("aws");
-			
-			postDtoV2.setTags(tags);
-			
-			return ResponseEntity.ok(postDtoV2);
-		}
+	@GetMapping(value = "/api/posts/{id}", params = "version=2")
+	public ResponseEntity<PostDtoV2> getPostByIdV2(@PathVariable long id){
+		PostDto postDto = postService.getPostById(id);
+		
+		PostDtoV2 postDtoV2 = new PostDtoV2();
+		postDtoV2.setId(postDto.getId());
+		postDtoV2.setTitle(postDto.getTitle());
+		postDtoV2.setDescription(postDto.getDescription());
+		postDtoV2.setContent(postDto.getContent());
+		
+		List<String> tags = new ArrayList<>();
+		tags.add("java");
+		tags.add("spring boot");
+		tags.add("aws");
+		
+		postDtoV2.setTags(tags);
+		
+		return ResponseEntity.ok(postDtoV2);
+	}
 	
 	// update post by id rest api
 	@PreAuthorize("hasRole('ADMIN')")
