@@ -5,7 +5,6 @@ import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_PAGE_SI
 import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_SORT_BY;
 import static com.alpha.www.SpringBootBlogApp.utils.AppConstants.DEFAULT_SORT_DIRECTION;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.www.SpringBootBlogApp.payload.PostDto;
-import com.alpha.www.SpringBootBlogApp.payload.PostDtoV2;
 import com.alpha.www.SpringBootBlogApp.payload.PostResponse;
 import com.alpha.www.SpringBootBlogApp.service.PostService;
 
@@ -53,31 +50,10 @@ public class PostController {
 		return postService.getAllPosts(pageNo, pageSize, sortBy, sortDir);
 	}
 	
-	// get post by id rest api v1
-	@GetMapping(value = "/api/posts/{id}", produces = "application/vnd.nick.v1+json")
+	// get post by id rest api
+	@GetMapping(value = "/api/v1/posts/{id}")
 	public ResponseEntity<PostDto> getPostByIdV1(@PathVariable long id){
 		return ResponseEntity.ok(postService.getPostById(id));
-	}
-	
-	// get post by id rest api v2
-	@GetMapping(value = "/api/posts/{id}", produces = "application/vnd.nick.v2+json")
-	public ResponseEntity<PostDtoV2> getPostByIdV2(@PathVariable long id){
-		PostDto postDto = postService.getPostById(id);
-		
-		PostDtoV2 postDtoV2 = new PostDtoV2();
-		postDtoV2.setId(postDto.getId());
-		postDtoV2.setTitle(postDto.getTitle());
-		postDtoV2.setDescription(postDto.getDescription());
-		postDtoV2.setContent(postDto.getContent());
-		
-		List<String> tags = new ArrayList<>();
-		tags.add("java");
-		tags.add("spring boot");
-		tags.add("aws");
-		
-		postDtoV2.setTags(tags);
-		
-		return ResponseEntity.ok(postDtoV2);
 	}
 	
 	// update post by id rest api

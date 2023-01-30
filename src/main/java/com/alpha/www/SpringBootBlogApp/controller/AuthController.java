@@ -14,7 +14,7 @@ import com.alpha.www.SpringBootBlogApp.payload.RegisterDto;
 import com.alpha.www.SpringBootBlogApp.service.AuthService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
 	@Autowired

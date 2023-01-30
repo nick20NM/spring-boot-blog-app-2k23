@@ -20,7 +20,7 @@ import com.alpha.www.SpringBootBlogApp.service.CommentService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class CommentController {
 
 	@Autowired

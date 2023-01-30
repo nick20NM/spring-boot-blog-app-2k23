@@ -52,9 +52,9 @@ public class SecurityConfig {
 					.authorizeHttpRequests(authorize -> 
 			//		authorize.anyRequest().authenticated()
 					authorize
-					.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
 //					.requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
-					.requestMatchers("/api/auth/**").permitAll()
+					.requestMatchers("/api/v1/auth/**").permitAll()
 					.anyRequest().authenticated())
 					.exceptionHandling(exception -> 
 					exception.authenticationEntryPoint(authenticationEntryPoint))
